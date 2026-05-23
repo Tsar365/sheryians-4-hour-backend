@@ -32,14 +32,35 @@ app.get('/register', (req, res) => { //will show the form
 
 app.post('/register', async (req, res) => { //will handle the form data
   const { username, email, password } = req.body;
-  const newUser=await userModel.create({
+  const newUser = await userModel.create({
     username: username,
     email: email,
     password: password
   }); //data save in db
-
   res.send(newUser);
 });
+
+app.get('/get-users', async (req, res) => {
+  const users = await userModel.find(); //wait before userModel.find(); finishes. After finish go to this code: res.send(users); userModel.find()=> will get all users from the database and return them as an array of objects.
+  // const users = await userModel.find({
+  //   username: 'q'
+  // }); 
+  res.send(users);
+});
+
+app.get('/update-users', async (req, res) => {
+  await userModel.updateOne({ username: 'q' }, { email: 'john@example.com' }); //will update the first user with username 'q' to 'john'
+  const users = await userModel.find(); 
+  res.send(users);
+});
+
+
+app.get('/delete-users', async (req, res) => {
+  await userModel.deleteOne({ username: 'mmmm' }); //will delete the first user with username 'q'
+  const users = await userModel.find(); 
+  res.send(users);
+});
+
 
 
 app.get('/test',  //route-specific middleware
