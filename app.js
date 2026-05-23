@@ -7,6 +7,7 @@ app.use(morgan('dev')); //will run later than the custom middleware, because it 
 //re.body te data pawar jnno ei 2 ta use krte hbe, jodi json data pathano hoy tahole express.json() use krte hbe, jodi form data pathano hoy tahole express.urlencoded() use krte hbe.
 app.use(express.json()); //body parser, json data parse kore req.body te rakhbe, for example: { "username": "john", "email": "
 app.use(express.urlencoded({ extended: true })); //form data parse kore req.body te rakhbe, for example: { "username": "john", "email": "john@example.com" }
+app.use(express.static('public')); //static file serve korar jonno, public folder er vitore je file gulo thakbe se gulo static file hisebe serve hobe, for example: /public/style.css will be served as /style.css
 
 app.set('view engine', 'ejs'); //set method use kore view engine set kora hoyeche, ejs use korar jonno
 
