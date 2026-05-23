@@ -1,6 +1,8 @@
 const express = require('express'); //express use http behind the scene
 const app = express();
-const morgan = require('morgan'); 
+const morgan = require('morgan');
+const userModel = require('./models/user');
+const dbConnection = require('./config/db');
 
 app.use(morgan('dev')); //will run later than the custom middleware, because it is placed after the custom middleware in the code.
 
@@ -13,28 +15,45 @@ app.set('view engine', 'ejs'); //set method use kore view engine set kora hoyech
 
 app.use((req, res, next) => {  //always put middleware before all routes
   console.log("this is middleware");
-  const a=2
-  const b=3
-  console.log(a+b);
-   return next(); 
-}); 
+  const a = 2
+  const b = 3
+  console.log(a + b);
+  return next();
+});
 
 app.get('/', (req, res) => {
   res.render('index');
 });
 
+
+app.get('/register', (req, res) => { //will show the form
+  res.render('register');
+});
+
+app.post('/register', async (req, res) => { //will handle the form data
+  const { username, email, password } = req.body;
+  const newUser=await userModel.create({
+    username: username,
+    email: email,
+    password: password
+  }); //data save in db
+
+  res.send(newUser);
+});
+
+
 app.get('/test',  //route-specific middleware
 
-   (req, res, next)=>{
-  const a=5;
-  const b=7;
-  console.log(a+b);
-  return next();
-}, 
+  (req, res, next) => {
+    const a = 5;
+    const b = 7;
+    console.log(a + b);
+    return next();
+  },
 
-(req, res) => {
-  res.send('test');
-});
+  (req, res) => {
+    res.send('test');
+  });
 
 app.get('/about', (req, res) => {
   res.send('about');
